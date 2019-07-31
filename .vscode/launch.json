@@ -15,7 +15,7 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "nodemon",
+      "name": "nodemon/babel",
       "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon",
       "program": "${workspaceFolder}/index.js",
       "restart": true,

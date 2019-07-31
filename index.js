@@ -8,6 +8,7 @@ import chalk from "chalk";
 const typeDefs = `
   type Query {
     me: User!
+    post: Post!
   }
 
   type User {
@@ -15,6 +16,13 @@ const typeDefs = `
     name: String!
     email: String!
     age: Int
+  }
+
+  type Post {
+    id: ID!
+    title: String!
+    body: String!
+    published: Boolean!
   }
 `;
 
@@ -28,6 +36,14 @@ const resolvers = {
         email: "janet@janetxyz.com",
         age: 24
       };
+    },
+    post() {
+      return {
+        id: "asdf123",
+        title: "hello",
+        body: "this might be body",
+        published: true
+      }
     }
   }
 };

@@ -16,10 +16,10 @@
       "type": "node",
       "request": "launch",
       "name": "nodemon",
-      "runtimeExecutable": "nodemon",
+      "runtimeExecutable": "${workspaceFolder}/node_modules/.bin/nodemon",
       "program": "${workspaceFolder}/index.js",
       "restart": true,
-      "console": "integratedTerminal",
+      "console": "internalConsole",
       "internalConsoleOptions": "neverOpen",
       "runtimeArgs": ["--exec", "babel-node"]
     }

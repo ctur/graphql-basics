@@ -7,31 +7,27 @@ import chalk from "chalk";
 // ! Always returns that type
 const typeDefs = `
   type Query {
-    title: String!
-    price: Float!
-    releaseYear: Int
-    rating: Float
-    inStock: Boolean!
+    me: User!
+  }
+
+  type User {
+    id: ID!
+    name: String!
+    email: String!
+    age: Int
   }
 `;
 
 // Resolvers
 const resolvers = {
   Query: {
-    title() {
-      return "title";
-    },
-    price() {
-      return 4.95;
-    },
-    releaseYear() {
-      return 2015;
-    },
-    rating() {
-      return 3.23;
-    },
-    inStock() {
-      return false;
+    me() {
+      return {
+        id: "123098",
+        name: "Janet",
+        email: "janet@janetxyz.com",
+        age: 24
+      };
     }
   }
 };

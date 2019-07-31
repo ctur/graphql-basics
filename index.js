@@ -1,55 +1,64 @@
 import { GraphQLServer } from "graphql-yoga";
+import chalk from "chalk";
+
+// String, Boolean, Int, Float, ID -> Scalar Types
 
 // Type definitions (schema)
-// ! Always returns String
+// ! Always returns that type
 const typeDefs = `
   type Query {
-    hello: String!
-    name: String!
-    location: String!
-    bio: String!
+    title: String!
+    price: Float!
+    releaseYear: Int
+    rating: Float
+    inStock: Boolean!
   }
 `;
 
 // Resolvers
 const resolvers = {
   Query: {
-    hello() {
-      return "Hello GraphQL";
+    title() {
+      return "title";
     },
-    name() {
-      return "Janet Doe";
+    price() {
+      return 4.95;
     },
-    location() {
-      return "Istanbul";
+    releaseYear() {
+      return 2015;
     },
-    bio() {
-      return "Working progress GraphQL";
+    rating() {
+      return 3.23;
+    },
+    inStock() {
+      return false;
     }
   }
 };
 
 const logInput = async (resolve, root, args, context, info) => {
-  console.log("----- LOG -----");
-  console.log(`Input: ${JSON.stringify(args)}`);
-  console.log(`Requested to '${info.path.key}'`);
+  console.log(
+    chalk.blue(
+      `Requested to '${info.path.key}', Input: ${JSON.stringify(args)}\n`
+    )
+  );
   const result = await resolve(root, args, context, info);
   return result;
 };
 
-const logResult = async (resolve, root, args, context, info) => {
-  const result = await resolve(root, args, context, info);
-  console.log(`Result: ${JSON.stringify(result)}`);
-  console.log("----- LOG -----\n");
-  return result;
-};
+// const logResult = async (resolve, root, args, context, info) => {
+//   console.log(`Result: ${JSON.stringify(result)}`);
+//   console.log("----- END -----\n");
+//   const result = await resolve(root, args, context, info);
+//   return result;
+// };
 
 const server = new GraphQLServer({
   typeDefs,
   resolvers,
-  middlewares: [logInput, logResult]
+  middlewares: [logInput]
 });
 
 server.start(() => {
-  console.log("Server is running");
+  console.log("Server is running...");
 });

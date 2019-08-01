@@ -87,9 +87,28 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser(name: String!, email: String!, age: Int): User!
-    createPost(title: String!, body: String!, published: Boolean!, author: ID!): Post!
-    createComment(text: String!, author: ID!, post: ID!): Comment!
+    createUser(data: CreateUserInput): User!
+    createPost(data: CreatePostInput): Post!
+    createComment(data: CreateCommentInput): Comment!
+  }
+
+  input CreateUserInput {
+    name: String!
+    email: String!
+    age: Int
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+    published: Boolean!
+    author: ID!
+  }
+
+  input CreateCommentInput {
+    text: String!
+    author: ID!
+    post: ID!
   }
 
   type User {
@@ -164,45 +183,41 @@ const resolvers = {
   },
   Mutation: {
     createUser(parent, args, ctx, info) {
-      const { name, email, age } = args;
-      const emailInUse = users.some(user => user.email === email);
+      const emailInUse = users.some(user => user.email === args.data.email);
 
       if (emailInUse) throw new Error("Email address already in use.");
       const user = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       users.push(user);
       return user;
     },
     createPost(parent, args, ctx, info) {
-      const { title, body, published, author } = args;
-      const userExists = users.some(user => user.id === author);
+      const userExists = users.some(user => user.id === args.data.author);
 
       if (!userExists) throw new Error("User does not exist.");
 
       const post = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       posts.push(post);
       return post;
     },
     createComment(parent, args, ctx, info) {
-      const { text, author, post } = args;
-
-      const userExist = users.some(user => user.id === author);
+      const userExist = users.some(user => user.id === args.data.author);
       if (!userExist) throw new Error("User does not exist.");
 
       const postExistPublished = posts.some(
-        post => post.id === args.post && post.published
+        post => post.id === args.data.post && post.published
       );
       if (!postExistPublished)
         throw new Error("Post does not exist or not published.");
 
       const comment = {
         id: uuidv4(),
-        ...args
+        ...args.data
       };
       comments.push(comment);
       return comment;
@@ -249,7 +264,7 @@ const resolvers = {
 const logInput = async (resolve, root, args, context, info) => {
   console.log(
     chalk.cyan(
-      `Requested to '${info.path.key}', Input: ${JSON.stringify(args)}`
+      `Requested for '${info.path.key}', Input: ${JSON.stringify(args)}`
     )
   );
   const result = await resolve(root, args, context, info);

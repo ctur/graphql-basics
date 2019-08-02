@@ -7,4 +7,4 @@
 ## Run
 
 - yarn start || npm start
-- open localhost:4000
+- navigate to localhost:4000

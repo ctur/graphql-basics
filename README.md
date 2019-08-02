@@ -2,9 +2,9 @@
 
 ## Installation
 
-- yarn
+- yarn || npm install
 
 ## Run
 
-- yarn start
+- yarn start || npm start
 - open localhost:4000
